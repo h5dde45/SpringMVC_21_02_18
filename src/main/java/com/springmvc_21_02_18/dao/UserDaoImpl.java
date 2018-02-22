@@ -1,16 +1,13 @@
 package com.springmvc_21_02_18.dao;
 
 import com.springmvc_21_02_18.entity.User;
+import com.springmvc_21_02_18.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
-
 
     private JdbcTemplate jdbcTemplate;
 
@@ -22,19 +19,33 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() {
         String sql = "select * from user";
-        jdbcTemplate.query(sql, new UserMapper());
-        return null;
+        return jdbcTemplate.query(sql, new UserMapper());
     }
 
-    public static class UserMapper implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            User user = new User();
-            user.setId(resultSet.getInt("id"));
-            user.setName(resultSet.getString("name"));
-            user.setEmail(resultSet.getString("email"));
-            user.setAge(resultSet.getInt("age"));
-            return user;
-        }
+    @Override
+    public void save(User user) {
+        String sql = "INSERT INTO  user  (name ,email,age) VALUES (?,?,?)";
+        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getAge());
     }
+
+    @Override
+    public void delete(int id) {
+        String sql = "DELETE  FROM user  WHERE id=?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public void update(User user) {
+        String sql = "UPDATE  user  SET name=?, email=?, age=? WHERE id=?";
+        jdbcTemplate.update(sql, user.getName(), user.getEmail(), user.getAge(), user.getId());
+        System.out.println();
+    }
+
+    @Override
+    public User getById(int id) {
+        String sql = "SELECT * from user WHERE id=?";
+        User user = jdbcTemplate.queryForObject(sql, new UserMapper(), id);
+        return user;
+    }
+
 }
