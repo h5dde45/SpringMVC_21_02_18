@@ -1,10 +1,7 @@
 package com.springmvc_21_02_18.config;
 
-import com.springmvc_21_02_18.dao.UserDao;
-import com.springmvc_21_02_18.dao.UserDaoImpl;
-import com.springmvc_21_02_18.service.UserService;
-import com.springmvc_21_02_18.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -12,10 +9,11 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
+@ComponentScan(basePackages = {"com.springmvc_21_02_18.service", "com.springmvc_21_02_18.dao"})
 public class SpringConfig {
 
     @Bean
-    public JdbcTemplate getJdbcTemplate(){
+    public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(getDataSource());
     }
 
@@ -28,15 +26,4 @@ public class SpringConfig {
         dataSource.setPassword("root");
         return dataSource;
     }
-
-    @Bean
-    public UserDao getUserDao(){
-        return new UserDaoImpl(getJdbcTemplate());
-    }
-
-    @Bean
-    public UserService getUserService(){
-        return new UserServiceImpl();
-    }
-
 }

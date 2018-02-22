@@ -4,9 +4,11 @@ import com.springmvc_21_02_18.entity.User;
 import com.springmvc_21_02_18.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class UserDaoImpl implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
